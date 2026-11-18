@@ -44,18 +44,22 @@ function shell(content) {
   app.innerHTML = `
     <header class="top">
       <div class="institutional-logos" aria-label="Logotipos institucionais">
-        <img class="school-logo" src="/logos/ermentina-leal.png" alt="Escola Ermentina Leal">
-        <img class="future-logo" src="/logos/escola-do-futuro.png" alt="Certificação Escola do Futuro">
-        <img class="fapes-logo" src="/logos/fapes.png" alt="FAPES — Fundação de Amparo à Pesquisa e Inovação do Espírito Santo">
-      </div>
-      <div class="brand">
-        <span class="brandmark">PJ</span>
-        <div>
-          <strong>PIC JÚNIOR <i>QUIZ</i></strong>
-          <small>Conhecimento • Pesquisa • Ciência</small>
+        <div class="logos-inner">
+          <img class="school-logo" src="/logos/ermentina-leal.png" alt="Escola Ermentina Leal">
+          <img class="future-logo" src="/logos/escola-do-futuro.png" alt="Certificação Escola do Futuro">
+          <img class="fapes-logo" src="/logos/fapes.png" alt="FAPES — Fundação de Amparo à Pesquisa e Inovação do Espírito Santo">
         </div>
       </div>
-      <span class="pill">50 QUESTÕES NO BANCO</span>
+      <div class="brand-row">
+        <div class="brand">
+          <span class="brandmark">PJ</span>
+          <div>
+            <strong>PIC JÚNIOR <i>QUIZ</i></strong>
+            <small>Conhecimento • Pesquisa • Ciência</small>
+          </div>
+        </div>
+        <span class="pill">50 QUESTÕES NO BANCO</span>
+      </div>
     </header>
 
     <main>${content}</main>
@@ -121,15 +125,8 @@ function home(error = '') {
         </aside>
       </div>
 
-      <div class="visual">
-        <div class="orb">⌬</div>
-        <div class="visualtext">
-          <b>INVESTIGAR</b>
-          <span>OBSERVAR • ANALISAR • DESCOBRIR</span>
-        </div>
-        <div class="bars">
-          <i></i><i></i><i></i><i></i><i></i><i></i>
-        </div>
+      <div class="visual visual-image">
+        <img src="/hero-visual.png" alt="Ilustração com círculos coloridos e números binários 1 e 0">
       </div>
     </section>
   `);
