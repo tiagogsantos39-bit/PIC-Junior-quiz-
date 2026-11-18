@@ -26,6 +26,16 @@ select id, question, options, image_url from public.quiz_questions;
 
 grant select on public.public_quiz_questions to anon, authenticated;
 
+
+create table if not exists public.quiz_attempts (
+  id uuid primary key default gen_random_uuid(),
+  participant_name text not null,
+  score integer not null,
+  total integer not null,
+  created_at timestamptz not null default now()
+);
+alter table public.quiz_attempts enable row level security;
+
 -- Ranking público: expõe somente nome e pontuação, sem acesso direto às tabelas.
 create or replace view public.public_quiz_ranking as
 select
@@ -37,15 +47,6 @@ from public.quiz_attempts
 order by score desc, created_at asc, id asc;
 
 grant select on public.public_quiz_ranking to anon, authenticated;
-
-create table if not exists public.quiz_attempts (
-  id uuid primary key default gen_random_uuid(),
-  participant_name text not null,
-  score integer not null,
-  total integer not null,
-  created_at timestamptz not null default now()
-);
-alter table public.quiz_attempts enable row level security;
 
 create table if not exists public.quiz_answers (
   id bigint generated always as identity primary key,
