@@ -43,6 +43,11 @@ const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({
 function shell(content) {
   app.innerHTML = `
     <header class="top">
+      <div class="institutional-logos" aria-label="Logotipos institucionais">
+        <img class="school-logo" src="/logos/ermentina-leal.png" alt="Escola Ermentina Leal">
+        <img class="future-logo" src="/logos/escola-do-futuro.png" alt="Certificação Escola do Futuro">
+        <img class="fapes-logo" src="/logos/fapes.png" alt="FAPES — Fundação de Amparo à Pesquisa e Inovação do Espírito Santo">
+      </div>
       <div class="brand">
         <span class="brandmark">PJ</span>
         <div>
