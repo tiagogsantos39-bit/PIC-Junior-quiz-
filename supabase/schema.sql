@@ -26,6 +26,7 @@ select id, question, options, image_url from public.quiz_questions;
 
 grant select on public.public_quiz_questions to anon, authenticated;
 
+
 create table if not exists public.quiz_attempts (
   id uuid primary key default gen_random_uuid(),
   participant_name text not null,
@@ -34,6 +35,18 @@ create table if not exists public.quiz_attempts (
   created_at timestamptz not null default now()
 );
 alter table public.quiz_attempts enable row level security;
+
+-- Ranking público: expõe somente nome e pontuação, sem acesso direto às tabelas.
+create or replace view public.public_quiz_ranking as
+select
+  row_number() over (order by score desc, created_at asc, id asc)::integer as position,
+  participant_name,
+  score,
+  total
+from public.quiz_attempts
+order by score desc, created_at asc, id asc;
+
+grant select on public.public_quiz_ranking to anon, authenticated;
 
 create table if not exists public.quiz_answers (
   id bigint generated always as identity primary key,
@@ -75,10 +88,10 @@ begin
   if not public.verify_quiz_code(p_code) then
     raise exception 'Código inválido';
   end if;
-  if jsonb_typeof(p_answers) <> 'array' or jsonb_array_length(p_answers) <> 50 then
-    raise exception 'A tentativa deve conter exatamente 50 respostas';
+  if jsonb_typeof(p_answers) <> 'array' or jsonb_array_length(p_answers) <> 10 then
+    raise exception 'A tentativa deve conter exatamente 10 respostas';
   end if;
-  if (select count(distinct (x->>'question_id')::integer) from jsonb_array_elements(p_answers) x) <> 50 then
+  if (select count(distinct (x->>'question_id')::integer) from jsonb_array_elements(p_answers) x) <> 10 then
     raise exception 'Existem questões repetidas ou inválidas';
   end if;
   if exists (
@@ -96,7 +109,7 @@ begin
   where q.correct_option = (x->>'selected_option');
 
   insert into public.quiz_attempts(participant_name,score,total)
-  values(trim(p_name),v_score,50) returning id into v_attempt;
+  values(trim(p_name),v_score,10) returning id into v_attempt;
 
   insert into public.quiz_answers(attempt_id,question_id,selected_option,is_correct)
   select v_attempt,(x->>'question_id')::integer,(x->>'selected_option')::char(1),
@@ -104,7 +117,7 @@ begin
   from jsonb_array_elements(p_answers) x
   join public.quiz_questions q on q.id = (x->>'question_id')::integer;
 
-  return jsonb_build_object('attempt_id',v_attempt,'score',v_score,'total',50);
+  return jsonb_build_object('attempt_id',v_attempt,'score',v_score,'total',10);
 end;
 $$;
 grant execute on function public.submit_quiz_attempt(text,text,jsonb) to anon, authenticated;

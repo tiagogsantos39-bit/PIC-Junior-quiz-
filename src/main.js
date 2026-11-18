@@ -84,7 +84,8 @@ function home(error = '') {
         <div><b>10</b><small>por participante</small></div>
       </div>
 
-      <form id="start-form" class="panel">
+      <div class="home-grid">
+        <form id="start-form" class="panel">
         <label>Seu nome</label>
         <input name="name" maxlength="70" required
           placeholder="Digite seu nome">
@@ -104,7 +105,21 @@ function home(error = '') {
             ? 'Seus dados serão usados para registrar sua participação.'
             : 'Configure as credenciais do Supabase para habilitar o quiz.'}
         </p>
-      </form>
+        </form>
+
+        <aside class="ranking panel" aria-labelledby="ranking-title">
+          <div class="ranking-head">
+            <div>
+              <span class="eyebrow">DESEMPENHO</span>
+              <h2 id="ranking-title">Ranking</h2>
+            </div>
+            <span class="ranking-badge">TOP 10</span>
+          </div>
+          <div id="ranking-list" class="ranking-list" aria-live="polite">
+            <p class="ranking-empty">Carregando pontuações...</p>
+          </div>
+        </aside>
+      </div>
 
       <div class="visual">
         <div class="orb">⌬</div>
@@ -174,6 +189,46 @@ function home(error = '') {
 
     renderQuestion();
   });
+
+  loadRanking();
+}
+
+async function loadRanking() {
+  const container = document.querySelector('#ranking-list');
+  if (!container) return;
+
+  if (!supabase) {
+    container.innerHTML = '<p class="ranking-empty">Configure o Supabase para visualizar o ranking.</p>';
+    return;
+  }
+
+  const { data, error } = await supabase
+    .from('public_quiz_ranking')
+    .select('position,participant_name,score,total')
+    .order('position', { ascending: true })
+    .limit(10);
+
+  if (error) {
+    container.innerHTML = '<p class="ranking-empty">Não foi possível carregar o ranking agora.</p>';
+    return;
+  }
+
+  if (!data || data.length === 0) {
+    container.innerHTML = '<p class="ranking-empty">As pontuações aparecerão após a primeira participação.</p>';
+    return;
+  }
+
+  container.innerHTML = data.map(entry => {
+    const score = Number(entry.score);
+    const total = Number(entry.total) || 10;
+    return `
+      <div class="ranking-row">
+        <span class="ranking-position">${escapeHtml(entry.position)}</span>
+        <span class="ranking-name">${escapeHtml(entry.participant_name)}</span>
+        <strong class="ranking-score">${score}/${total}</strong>
+      </div>
+    `;
+  }).join('');
 }
 
 function renderQuestion() {

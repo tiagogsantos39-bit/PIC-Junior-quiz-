@@ -25,8 +25,13 @@ Envie a pasta para um repositório GitHub e conecte-o ao Netlify. O arquivo `net
 - Uma única sequência com 50 questões, misturadas.
 - A ordem é embaralhada a cada tentativa.
 - Cada questão aparece uma vez por tentativa.
-- A finalização exige 50 respostas diferentes.
+- A finalização exige 10 respostas diferentes selecionadas entre as 50 questões.
 - O Supabase calcula a pontuação no servidor e registra tentativa/respostas.
+- O ranking público exibe as 10 maiores pontuações na tela inicial.
+
+## Ranking
+- Depois de executar o schema atualizado, o ranking usa a view `public_quiz_ranking`.
+- A view expõe apenas posição, nome, pontuação e total; as tabelas internas continuam protegidas.
 
 ## Antes de divulgar
 - Troque o código inicial `PIC2026` por um código forte e compartilhado somente com participantes.

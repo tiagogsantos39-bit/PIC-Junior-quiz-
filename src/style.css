@@ -41,3 +41,83 @@
   .institutional-logos .fapes-logo{width:38%;max-height:48px}
   .top .brand{padding:0 14px 12px}
 }
+
+
+.home-grid{
+  display:grid;
+  grid-template-columns:minmax(0,440px) minmax(280px,1fr);
+  gap:24px;
+  align-items:start;
+  max-width:900px;
+}
+.ranking{
+  min-height:280px;
+  padding:24px;
+}
+.ranking-head{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:16px;
+  margin-bottom:18px;
+}
+.ranking-head h2{
+  font:600 25px 'Space Grotesk';
+  margin:8px 0 0;
+}
+.ranking-badge{
+  border:1px solid #28617a;
+  border-radius:999px;
+  color:#5ce4ef;
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:1.4px;
+  padding:7px 10px;
+}
+.ranking-list{
+  display:grid;
+  gap:8px;
+}
+.ranking-row{
+  display:grid;
+  grid-template-columns:30px minmax(0,1fr) auto;
+  align-items:center;
+  gap:10px;
+  min-height:43px;
+  padding:8px 10px;
+  border:1px solid #264760;
+  border-radius:10px;
+  background:#0a1d32;
+}
+.ranking-position{
+  display:grid;
+  place-items:center;
+  width:25px;
+  height:25px;
+  border-radius:7px;
+  background:#183b55;
+  color:#54dce8;
+  font-size:12px;
+  font-weight:700;
+}
+.ranking-name{
+  overflow:hidden;
+  color:#dceaf6;
+  font-size:13px;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+.ranking-score{
+  color:#fff;
+  font:700 14px 'Space Grotesk';
+}
+.ranking-empty{
+  color:#87a3bd;
+  font-size:12px;
+  line-height:1.5;
+  margin:12px 0 0;
+}
+@media(max-width:760px){
+  .home-grid{grid-template-columns:1fr}
+  .ranking{min-height:0}
+}
