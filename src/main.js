@@ -13,7 +13,6 @@ const app = document.querySelector('#app');
 
 const state = {
   name: '',
-  code: '',
   list: [],
   index: 0,
   answers: [],
@@ -90,10 +89,6 @@ function home(error = '') {
         <input name="name" maxlength="70" required
           placeholder="Digite seu nome">
 
-        <label>Código de acesso</label>
-        <input name="code" maxlength="40" required
-          placeholder="Informe o código">
-
         <button class="primary">
           Começar quiz <span>→</span>
         </button>
@@ -102,7 +97,7 @@ function home(error = '') {
 
         <p class="hint">
           ${supabase
-            ? 'Seus dados serão usados para registrar sua participação.'
+            ? 'Sua participação será registrada no ranking público.'
             : 'Configure as credenciais do Supabase para habilitar o quiz.'}
         </p>
         </form>
@@ -140,21 +135,10 @@ function home(error = '') {
     const fd = new FormData(e.currentTarget);
 
     state.name = String(fd.get('name')).trim();
-    state.code = String(fd.get('code')).trim();
-
-    if (!state.name || !state.code) return;
+    if (!state.name) return;
 
     if (!supabase) {
       return home('O site ainda não está conectado ao Supabase. Confira as variáveis de ambiente.');
-    }
-
-    const { data: valid, error: codeError } = await supabase.rpc(
-      'verify_quiz_code',
-      { p_code: state.code }
-    );
-
-    if (codeError || valid !== true) {
-      return home('Código inválido ou indisponível. Confira com a organização.');
     }
 
     const { data, error } = await supabase
@@ -313,7 +297,6 @@ async function finish() {
     'submit_quiz_attempt',
     {
       p_name: state.name,
-      p_code: state.code,
       p_answers: state.answers
     }
   );
