@@ -39,3 +39,5 @@ Envie a pasta para um repositório GitHub e conecte-o ao Netlify. O arquivo `net
 - Configure autenticação e políticas adicionais para qualquer painel administrativo futuro.
 - Não publique a service_role key no navegador. Use apenas a chave anon/public.
 - A versão atual não inclui painel administrativo; os resultados ficam nas tabelas `quiz_attempts` e `quiz_answers`.
+
+Projeto PIC Júnior Quiz — atualização de configuração.
