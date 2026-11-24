@@ -71,7 +71,7 @@ as $$
 $$;
 grant execute on function public.verify_quiz_code(text) to anon, authenticated;
 
-create or replace function public.submit_quiz_attempt(p_name text, p_code text, p_answers jsonb)
+create or replace function public.submit_quiz_attempt(p_name text, p_answers jsonb)
 returns jsonb
 language plpgsql
 security definer
@@ -84,9 +84,6 @@ declare
 begin
   if length(trim(coalesce(p_name,''))) < 2 or length(p_name) > 70 then
     raise exception 'Nome inválido';
-  end if;
-  if not public.verify_quiz_code(p_code) then
-    raise exception 'Código inválido';
   end if;
   if jsonb_typeof(p_answers) <> 'array' or jsonb_array_length(p_answers) <> 10 then
     raise exception 'A tentativa deve conter exatamente 10 respostas';
@@ -120,8 +117,7 @@ begin
   return jsonb_build_object('attempt_id',v_attempt,'score',v_score,'total',10);
 end;
 $$;
-grant execute on function public.submit_quiz_attempt(text,text,jsonb) to anon, authenticated;
-
+grant execute on function public.submit_quiz_attempt(text,jsonb) to anon, authenticated;
 -- Código inicial para testes. Troque por outro antes de divulgar o quiz.
 insert into public.quiz_access_codes(code_hash)
 select crypt('PIC2026', gen_salt('bf'))
