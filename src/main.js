@@ -342,18 +342,9 @@ async function finish() {
           : escapeHtml(saveError)}
       </p>
 
-      <button class="primary" id="again">
-        Fazer nova tentativa
-      </button>
     </section>
   `);
 
-  document.querySelector('#again').addEventListener('click', () => {
-    state.index = 0;
-    state.answers = [];
-    state.list = [];
-    home();
-  });
 }
 
 home();
